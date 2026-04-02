@@ -13,7 +13,7 @@ st.subheader('Libra Lab | M&E Center, Ajou')
 st.markdown("---")
 
 # 3. 데이터 로드
-file_path = r"C:\King Cho\OneDrive - Loyalty\건강가정진흥원(KIHF)\강복정\이주여성폭력\상담데이터_WordString.xlsx"
+file_path = "상담데이터_WordString.xlsx"
 
 @st.cache_data
 def load_data():
