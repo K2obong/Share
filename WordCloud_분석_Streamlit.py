@@ -67,7 +67,7 @@ if st.session_state["authentication_status"]:
     st.sidebar.write(f"환영합니다, **{st.session_state['name']}**님!")
 
     # 데이터 경로 (PC 환경 유지)
-    file_path = r"C:\King Cho\OneDrive - Loyalty\건강가정진흥원(KIHF)\강복정\이주여성폭력\상담데이터_WordString.xlsx"  # 🚩 Github에서는 "./상담데이터_WordString.xlsx"로 수정要
+    file_path = "./상담데이터_WordString.xlsx"  # 🚩 Github에서는 "./상담데이터_WordString.xlsx"로 수정要
     
     @st.cache_data
     def load_data():
@@ -138,7 +138,7 @@ if st.session_state["authentication_status"]:
                 return "rgb(0,164,239)" if word in target_words else "rgb(150, 150, 150)"
 
             wordcloud = WordCloud(
-                font_path='C:/Windows/Fonts/malgun.ttf',   # 🚩 Github에서는 MALGUN.TTF로 수정要
+                font_path='MALGUN.TTF',   # 🚩 Github에서는 MALGUN.TTF로 수정要
                 background_color='white',
                 width=1000, height=500
             ).generate_from_frequencies(word_counts).recolor(color_func=my_color_func)
