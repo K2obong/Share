@@ -93,7 +93,7 @@ try:
             return "rgb(0,164,239)" if word in target_words else "rgb(150, 150, 150)"
 
         wordcloud = WordCloud(
-            font_path='MALGUN.TTF',
+            font_path='./MALGUN.TTF',
             background_color='white',
             width=1000, height=500
         ).generate_from_frequencies(word_counts).recolor(color_func=my_color_func)
