@@ -13,11 +13,11 @@ st.subheader('Libra Lab | M&E Center, Ajou')
 st.markdown("---")
 
 # 3. 데이터 로드
-file_path = r"C:\King Cho\OneDrive - Loyalty\건강가정진흥원(KIHF)\강복정\이주여성폭력\상담데이터_Word.csv"
+file_path = r"C:\King Cho\OneDrive - Loyalty\건강가정진흥원(KIHF)\강복정\이주여성폭력\상담데이터_WordString.xlsx"
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv(file_path, encoding='utf-8-sig', low_memory=False)
+    df = pd.read_excel(file_path, engine='openpyxl')
     return df
 
 try:
