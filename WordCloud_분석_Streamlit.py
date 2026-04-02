@@ -67,7 +67,7 @@ if st.session_state["authentication_status"]:
     st.sidebar.write(f"환영합니다, **{st.session_state['name']}**님!")
 
     # 데이터 경로 (PC 환경 유지)
-    file_path = "./상담데이터_WordString.xlsx"  # 🚩 Github에서는 "./상담데이터_WordString.xlsx"로 수정要
+    file_path = r"C:\King Cho\OneDrive - Loyalty\건강가정진흥원(KIHF)\강복정\이주여성폭력\상담데이터_WordString.xlsx"  # 🚩 Github에서는 "./상담데이터_WordString.xlsx"로 수정要
     
     @st.cache_data
     def load_data():
@@ -111,12 +111,13 @@ if st.session_state["authentication_status"]:
         <div style="background-color: #2E86C1; padding: 25px; border-radius: 12px; border-left: 8px solid #154360;">   
             <h4 style="color: white; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px;">📋 분석 요약 보고 (Analysis Summary)</h4>   
             <div style="color: white; line-height: 1.8; font-size: 15px;">
-                <p style="margin: 5px 0;"><b>● 대상 국가:</b> <span style="color: #D4E6F1;">{display_countries}</span></p>
-                <p style="margin: 5px 0;"><b>● 폭력 유형:</b> <span style="color: #D4E6F1;">{display_types}</span></p>
+                <p style="margin: 5px 0;"><b>● 대상 국가:</b> <span style="color: #cde9fa;">{display_countries}</span></p>
+                <p style="margin: 5px 0;"><b>● 폭력 유형:</b> <span style="color: #cde9fa;">{display_types}</span></p>
                 <p style="margin: 5px 0;"><b>● 해당 상담건수:</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{filtered_df['상담번호'].nunique():,}건</span></p>
                 <p style="margin: 5px 0;"><b>● 사용된 단어 갯수(중복):</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{len(word_list):,}개</span></p>
                 <p style="margin: 8px 0 0 0; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.2); font-style: italic; font-size: 14px;">
-                    <b>- 분석 방법:</b> 상담 문장(Text)에서 의미있는 단어만을 추출, 그 단어들의 갯수(중복)를 단어의 크기에 반영하였음...Python>WordCloud
+                    <b>- Key Word 분석 방법:</b> 상담 문장(Text)에서 의미있는 단어만을 추출, 그 단어들의 갯수(중복)를 단어의 크기에 반영하였음.....Python>WordCloud</p>
+                    <b>- 분석필터 설정방법:</b> '폭력유형'과 '출신국'을 선택(복수 선택 가능) → 필터설정에 따라 분석값들이 실시간으로 변경됨
                 </p>
             </div>
         </div>
@@ -130,6 +131,12 @@ if st.session_state["authentication_status"]:
         
         # 워드클라우드 섹션 제목 추가 (선택 사항: 더 전문적으로 보입니다)
         st.subheader("☁️ 주요 상담 키워드 시각화 (Word Cloud)")
+        st.markdown(f"""        
+                <p style="margin: 5px 0;"><b>● 대상 국가:</b> <span style="color: #5CC1FF;">{display_countries}</span></p>
+                <p style="margin: 5px 0;"><b>● 폭력 유형:</b> <span style="color: #5CC1FF;">{display_types}</span></p>
+                <p style="margin: 5px 0;"><b>● 해당 상담건수:</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{filtered_df['상담번호'].nunique():,}건</span></p>
+                <p style="margin: 5px 0;"><b>● 사용된 단어 갯수(중복):</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{len(word_list):,}개</span></p>
+        """, unsafe_allow_html=True)
 
         # 5. 워드클라우드 시각화
         if word_counts:
@@ -138,7 +145,7 @@ if st.session_state["authentication_status"]:
                 return "rgb(0,164,239)" if word in target_words else "rgb(150, 150, 150)"
 
             wordcloud = WordCloud(
-                font_path='MALGUN.TTF',   # 🚩 Github에서는 MALGUN.TTF로 수정要
+                font_path='C:/Windows/Fonts/malgun.ttf',   # 🚩 Github에서는 MALGUN.TTF로 수정要
                 background_color='white',
                 width=1000, height=500
             ).generate_from_frequencies(word_counts).recolor(color_func=my_color_func)
@@ -158,11 +165,184 @@ if st.session_state["authentication_status"]:
             </div>
             """, unsafe_allow_html=True)
 
+
+            # ---------------------------------------------------------
+            # 9-2. [수정] 폭력유형별 출신국가 교차 분석 (상담건수 합계순 정렬)
+            # ---------------------------------------------------------
+            st.markdown("---")
+            st.subheader("📌 폭력유형 × 출신국가별 상담건수 분석")
+            st.info("💡 폭력유형과 출신국 선택에 따라 분석값이 연동됨.")
+            st.markdown(f"""        
+                <p style="margin: 5px 0;"><b>● 대상 국가:</b> <span style="color: #5CC1FF;">{display_countries}</span></p>
+                <p style="margin: 5px 0;"><b>● 폭력 유형:</b> <span style="color: #5CC1FF;">{display_types}</span></p>
+                <p style="margin: 5px 0;"><b>● 해당 상담건수:</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{filtered_df['상담번호'].nunique():,}건</span></p>
+                <p style="margin: 5px 0;"><b>● 사용된 단어 갯수(중복):</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{len(word_list):,}개</span></p>
+            """, unsafe_allow_html=True)
+
+            # 1. 피벗 테이블 생성 (Unique Count 기반)
+            cross_table = filtered_df.pivot_table(
+                index='출신국', 
+                columns='폭력유형', 
+                values='상담번호', 
+                aggfunc='nunique', 
+                fill_value=0
+            )
+
+            # 2-0. [열 정렬] 폭력유형(Column)을 전체 합계가 큰 순서대로 왼쪽부터 정렬
+            # 각 열의 합계를 구한 뒤 내림차순으로 열 이름을 정렬합니다.
+            col_order = cross_table.sum(axis=0).sort_values(ascending=False).index
+            cross_table = cross_table[col_order]
+
+            # 2. [핵심] 행 단위 합계를 계산하여 정렬용 임시 컬럼 생성
+            cross_table['합계'] = cross_table.sum(axis=1)
+
+            # 3. '합계' 컬럼을 기준으로 내림차순 정렬 (상담건수 많은 국가가 위로)
+            cross_table = cross_table.sort_values(by='합계', ascending=False)
+
+            # 4. 전체 합계(열 단위 합계)를 가장 아래 행에 추가
+            # [주의] 정렬 후에 추가해야 '전체 합계' 행이 중간에 섞이지 않습니다.
+            cross_table.loc['합계'] = cross_table.sum()
+
+            # 5. 천 단위 콤마 포맷팅 적용
+            formatted_cross_table = cross_table.style.format("{:,.0f}")
+
+            # 6. 표의 높이를 데이터 개수에 맞춰 충분히 확보
+            # 국가 수(행 개수)에 따라 높이를 계산합니다. 
+            # 보통 한 행당 35~40픽셀 정도 잡으면 스크롤 없이 쾌적합니다.
+            row_count = len(cross_table)
+            dynamic_height = (row_count * 38) + 5 # 행 높이 + 헤더/마진 여유분
+
+            # 7. 교차표 출력
+            st.dataframe(
+                formatted_cross_table, 
+                width=700,       # Browser의 가로폭만큼 늘리려면, 'stretch', 
+                height=dynamic_height # 세로 길이를 데이터 양에 맞춰 확장 (스크롤 방지)     # 기존값 400
+            )
+            st.write("")
+
+            # ---------------------------------------------------------
+            # 9-3. [수정] 상담방법별 출신국 교차 분석 (상담건수 합계순 정렬)
+            # ---------------------------------------------------------
+            st.markdown("---")
+            st.subheader("📌 상담방법 × 출신국별 상담건수 분석")
+            st.info("💡 폭력유형과 출신국 선택에 따라 분석값이 연동됨.")
+            st.markdown(f"""        
+                <p style="margin: 5px 0;"><b>● 대상 국가:</b> <span style="color: #5CC1FF;">{display_countries}</span></p>
+                <p style="margin: 5px 0;"><b>● 폭력 유형:</b> <span style="color: #5CC1FF;">{display_types}</span></p>
+                <p style="margin: 5px 0;"><b>● 해당 상담건수:</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{filtered_df['상담번호'].nunique():,}건</span></p>
+                <p style="margin: 5px 0;"><b>● 사용된 단어 갯수(중복):</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{len(word_list):,}개</span></p>
+            """, unsafe_allow_html=True)
+
+            # 1. 피벗 테이블 생성 (Unique Count 기반)
+            cross_table = filtered_df.pivot_table(
+                index='출신국', 
+                columns='상담방법', 
+                values='상담번호', 
+                aggfunc='nunique', 
+                fill_value=0
+            )
+
+            # 2-0. [열 정렬] 폭력유형(Column)을 전체 합계가 큰 순서대로 왼쪽부터 정렬
+            # 각 열의 합계를 구한 뒤 내림차순으로 열 이름을 정렬합니다.
+            col_order = cross_table.sum(axis=0).sort_values(ascending=False).index
+            cross_table = cross_table[col_order]
+
+            # 2. [핵심] 행 단위 합계를 계산하여 정렬용 임시 컬럼 생성
+            cross_table['합계'] = cross_table.sum(axis=1)
+
+            # 3. '합계' 컬럼을 기준으로 내림차순 정렬 (상담건수 많은 국가가 위로)
+            cross_table = cross_table.sort_values(by='합계', ascending=False)
+
+            # 4. 전체 합계(열 단위 합계)를 가장 아래 행에 추가
+            # [주의] 정렬 후에 추가해야 '전체 합계' 행이 중간에 섞이지 않습니다.
+            cross_table.loc['합계'] = cross_table.sum()
+
+            # 5. 천 단위 콤마 포맷팅 적용
+            formatted_cross_table = cross_table.style.format("{:,.0f}")
+
+            # 6. 표의 높이를 데이터 개수에 맞춰 충분히 확보
+            # 국가 수(행 개수)에 따라 높이를 계산합니다. 
+            # 보통 한 행당 35~40픽셀 정도 잡으면 스크롤 없이 쾌적합니다.
+            row_count = len(cross_table)
+            dynamic_height = (row_count * 38) + 5 # 행 높이 + 헤더/마진 여유분
+
+            # 7. 교차표 출력
+            st.dataframe(
+                formatted_cross_table, 
+                width=700,       # Browser의 가로폭만큼 늘리려면, 'stretch', 
+                height=dynamic_height # 세로 길이를 데이터 양에 맞춰 확장 (스크롤 방지)     # 기존값 400
+            )
+            st.write("")
+
+            # ---------------------------------------------------------
+            # 9-4. [수정] 의뢰인별 출신국 교차 분석 (상담건수 합계순 정렬)
+            # ---------------------------------------------------------
+            st.markdown("---")
+            st.subheader("📌 의뢰인 × 출신국별 상담건수 분석")
+            st.info("💡 폭력유형과 출신국 선택에 따라 분석값이 연동됨.")
+            st.markdown(f"""        
+                <p style="margin: 5px 0;"><b>● 대상 국가:</b> <span style="color: #5CC1FF;">{display_countries}</span></p>
+                <p style="margin: 5px 0;"><b>● 폭력 유형:</b> <span style="color: #5CC1FF;">{display_types}</span></p>
+                <p style="margin: 5px 0;"><b>● 해당 상담건수:</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{filtered_df['상담번호'].nunique():,}건</span></p>
+                <p style="margin: 5px 0;"><b>● 사용된 단어 갯수(중복):</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{len(word_list):,}개</span></p>
+            """, unsafe_allow_html=True)
+
+            # 1. 피벗 테이블 생성 (Unique Count 기반)
+            cross_table = filtered_df.pivot_table(
+                index='출신국', 
+                columns='의뢰인', 
+                values='상담번호', 
+                aggfunc='nunique', 
+                fill_value=0
+            )
+
+            # 2-0. [열 정렬] 폭력유형(Column)을 전체 합계가 큰 순서대로 왼쪽부터 정렬
+            # 각 열의 합계를 구한 뒤 내림차순으로 열 이름을 정렬합니다.
+            col_order = cross_table.sum(axis=0).sort_values(ascending=False).index
+            cross_table = cross_table[col_order]
+
+            # 2. [핵심] 행 단위 합계를 계산하여 정렬용 임시 컬럼 생성
+            cross_table['합계'] = cross_table.sum(axis=1)
+
+            # 3. '합계' 컬럼을 기준으로 내림차순 정렬 (상담건수 많은 국가가 위로)
+            cross_table = cross_table.sort_values(by='합계', ascending=False)
+
+            # 4. 전체 합계(열 단위 합계)를 가장 아래 행에 추가
+            # [주의] 정렬 후에 추가해야 '전체 합계' 행이 중간에 섞이지 않습니다.
+            cross_table.loc['합계'] = cross_table.sum()
+
+            # 5. 천 단위 콤마 포맷팅 적용
+            formatted_cross_table = cross_table.style.format("{:,.0f}")
+
+            # 6. 표의 높이를 데이터 개수에 맞춰 충분히 확보
+            # 국가 수(행 개수)에 따라 높이를 계산합니다. 
+            # 보통 한 행당 35~40픽셀 정도 잡으면 스크롤 없이 쾌적합니다.
+            row_count = len(cross_table)
+            dynamic_height = (row_count * 38) + 5 # 행 높이 + 헤더/마진 여유분
+
+            # 7. 교차표 출력
+            st.dataframe(
+                formatted_cross_table, 
+                width='stretch',       # Browser의 가로폭만큼 늘리려면, 'stretch'
+                height=dynamic_height # 세로 길이를 데이터 양에 맞춰 확장 (스크롤 방지)     # 기존값 400
+            )
+            st.write("")
+
+
+
             # 10. 사용된 단어 빈도 TOP 100 표 출력 (에러 해결 버전)
             # ---------------------------------------------------------
             st.markdown("---") 
             st.subheader("📋 사용된 단어의 갯수(상위 100개)")
-            
+            st.markdown(f"""        
+                <p style="margin: 5px 0;"><b>● 대상 국가:</b> <span style="color: #5CC1FF;">{display_countries}</span></p>
+                <p style="margin: 5px 0;"><b>● 폭력 유형:</b> <span style="color: #5CC1FF;">{display_types}</span></p>
+                <p style="margin: 5px 0;"><b>● 해당 상담건수:</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{filtered_df['상담번호'].nunique():,}건</span></p>
+                <p style="margin: 5px 0;"><b>● 사용된 단어 갯수(중복):</b> <span style="font-size: 18px; font-weight: bold; color: #F1C40F;">{len(word_list):,}개</span></p>
+            """, unsafe_allow_html=True)
+
+
+
             # 1. 데이터프레임 생성
             df_top100 = pd.DataFrame(word_counts.most_common(100), columns=['단어', '빈도수(회)'])
             df_top100.index = df_top100.index + 1
@@ -175,8 +355,8 @@ if st.session_state["authentication_status"]:
             
             st.dataframe(
                 formatted_df, 
-                width=300,             #  Browser 전체폭만큼 넓히려면, width='stretch', 
-                height=600
+                width=250,             #  Browser 전체폭만큼 넓히려면, width='stretch', 
+                height=735
             )
 
             # [추가] 최하단 격려 문구 (중간 크기 글자)
@@ -184,11 +364,11 @@ if st.session_state["authentication_status"]:
             st.write("") 
             
             # 방법 1: subheader 사용 (가장 표준적인 중간 크기)
-            st.subheader("홧띵~ 🍻")
+            # st.subheader("홧띵~ 🍻")
             
             # 만약 글자를 가운데로 정렬하고 싶으시다면 아래 HTML 방식도 좋습니다.
-            # st.markdown("<h3 style='text-align: center; color: #2E86C1;'>홧띵~ 🍻</h3>", unsafe_allow_html=True)
-        
+            st.markdown("<h3 style='text-align: center; color: #2E86C1; font-size:62px; font-weight: bold;'>홧띵~ 🍻</h3>", unsafe_allow_html=True)
+
         else:
             st.warning("데이터가 존재하지 않습니다.")
 
