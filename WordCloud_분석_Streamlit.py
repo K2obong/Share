@@ -67,7 +67,7 @@ if st.session_state["authentication_status"]:
     st.sidebar.write(f"환영합니다, **{st.session_state['name']}**님!")
 
     # 데이터 경로 (PC 환경 유지)
-    file_path = ".\상담데이터_WordString.xlsx"  # 🚩 Github에서는 "./상담데이터_WordString.xlsx"로 수정要
+    file_path = "./상담데이터_WordString.xlsx"  # 🚩 Github에서는 "./상담데이터_WordString.xlsx"로 수정要
     
     @st.cache_data
     def load_data():
