@@ -179,6 +179,16 @@ if st.session_state["authentication_status"]:
                 height=600
             )
 
+            # [추가] 최하단 격려 문구 (중간 크기 글자)
+            st.write("") # 표와의 간격을 위한 여백
+            st.write("") 
+            
+            # 방법 1: subheader 사용 (가장 표준적인 중간 크기)
+            st.subheader("홧띵~ 🍻")
+            
+            # 만약 글자를 가운데로 정렬하고 싶으시다면 아래 HTML 방식도 좋습니다.
+            # st.markdown("<h3 style='text-align: center; color: #2E86C1;'>홧띵~ 🍻</h3>", unsafe_allow_html=True)
+        
         else:
             st.warning("데이터가 존재하지 않습니다.")
 
