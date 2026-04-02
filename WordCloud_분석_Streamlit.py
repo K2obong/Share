@@ -210,7 +210,7 @@ if st.session_state["authentication_status"]:
             # 국가 수(행 개수)에 따라 높이를 계산합니다. 
             # 보통 한 행당 35~40픽셀 정도 잡으면 스크롤 없이 쾌적합니다.
             row_count = len(cross_table)
-            dynamic_height = (row_count * 37) + 10 # 행 높이 + 헤더/마진 여유분
+            dynamic_height = (row_count * 37) + 8 # 행 높이 + 헤더/마진 여유분
 
             # 7. 교차표 출력
             st.dataframe(
@@ -264,7 +264,7 @@ if st.session_state["authentication_status"]:
             # 국가 수(행 개수)에 따라 높이를 계산합니다. 
             # 보통 한 행당 35~40픽셀 정도 잡으면 스크롤 없이 쾌적합니다.
             row_count = len(cross_table)
-            dynamic_height = (row_count * 38) + 5 # 행 높이 + 헤더/마진 여유분
+            dynamic_height = (row_count * 37) + 8 # 행 높이 + 헤더/마진 여유분
 
             # 7. 교차표 출력
             st.dataframe(
@@ -318,7 +318,7 @@ if st.session_state["authentication_status"]:
             # 국가 수(행 개수)에 따라 높이를 계산합니다. 
             # 보통 한 행당 35~40픽셀 정도 잡으면 스크롤 없이 쾌적합니다.
             row_count = len(cross_table)
-            dynamic_height = (row_count * 38) + 5 # 행 높이 + 헤더/마진 여유분
+            dynamic_height = (row_count * 37) + 8 # 행 높이 + 헤더/마진 여유분
 
             # 7. 교차표 출력
             st.dataframe(
