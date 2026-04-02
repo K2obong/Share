@@ -45,7 +45,7 @@ if not st.session_state.get("authentication_status"):
 else:
     # 로그인 성공 후 메시지
     st.success("📝 본 연구는 다누리 콜센터의 2025년 상담데이터를 기반으로 이주여성들의 폭력 현황을 분석한 결과입니다.\n\n "
-               "학술적인 목적으로 제작되었으며, 다른 목적의 사용은 공식적인 Approval이 필요합니다.")
+               "🚩 학술적인 목적으로 제작되었으며, 다른 목적의 사용은 공식적인 Approval이 필요합니다.")
 
 st.markdown("---")
 
@@ -76,7 +76,7 @@ if st.session_state["authentication_status"]:
 
     # 3. 데이터 로드 설정
     # [Tip] PC에서는 아래 경로를 쓰고, GitHub 올릴 땐 파일명만 남기세요.
-    file_path = r"C:\King Cho\OneDrive - Loyalty\건강가정진흥원(KIHF)\강복정\이주여성폭력\상담데이터_WordString.xlsx" 
+    file_path = "상담데이터_WordString.xlsx" 
     
     @st.cache_data
     def load_data():
@@ -166,9 +166,9 @@ if st.session_state["authentication_status"]:
             def my_color_func(word, **kwargs):
                 return "rgb(0,164,239)" if word in target_words else "rgb(150, 150, 150)"
 
-            # [중요] GitHub 환경이면 font_path='MALGUN.TTF'로 수정 필수
+            # 🚩💀 [중요] GitHub 환경이면 font_path='MALGUN.TTF'로 수정 필수
             wordcloud = WordCloud(
-                font_path='C:/Windows/Fonts/malgun.ttf', 
+                font_path='MALGUN.TTF', 
                 background_color='white',
                 width=1000, height=500
             ).generate_from_frequencies(word_counts).recolor(color_func=my_color_func)
